@@ -1,7 +1,6 @@
 package com.hspedu.furns.web;
 
 import com.hspedu.furns.entity.Admin;
-import com.hspedu.furns.entity.Member;
 import com.hspedu.furns.service.AdminService;
 import com.hspedu.furns.service.impl.AdminServiceImpl;
 
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AdminServlet extends BasicServlet {
+    // test
     private AdminService adminService = new AdminServiceImpl();
 
     protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
