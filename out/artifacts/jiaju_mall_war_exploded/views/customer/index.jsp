@@ -19,8 +19,13 @@
             // 给add to cart 按钮绑定事件
             $("button.add-to-cart").click(function () {
                 var furnId = $(this).attr("furnId");
-                // alert("ok~~~" + furnId);
-
+                alert("ok~~~" + furnId);
+                var stock = $(this).attr("stock");
+                if (stock == 0) {
+                    // alert("ok~~~!!" + stock);
+                    $(this).text("暂时缺货");
+                    return false;
+                }
                 // 发出一个请求添加家居 => ajax
                 location.href = "cartServlet?action=addItem&id=" + furnId;
 
@@ -158,7 +163,7 @@
                                                    data-bs-target="#exampleModal"><i
                                                         class="icon-size-fullscreen"></i></a>
                                             </div>
-                                            <button title="Add To Cart" furnId="${furn.id}" class="add-to-cart">Add
+                                            <button title="Add To Cart" stock="${furn.stock}" furnId="${furn.id}" class="add-to-cart">Add
                                                 To Cart
                                             </button>
                                         </div>

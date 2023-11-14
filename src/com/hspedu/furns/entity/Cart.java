@@ -11,6 +11,10 @@ public class Cart {
     // 包含多个CartItem,使用HashMap
     private HashMap<Integer, CartItem> items = new HashMap();
 
+    public boolean isEmpty() {
+        return items.size() == 0;
+    }
+
     public void clear() {
         items.clear();
     }
