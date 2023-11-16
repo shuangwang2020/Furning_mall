@@ -9,10 +9,7 @@ import com.hspedu.furns.dao.impl.OrderItemDaoImpl;
 import com.hspedu.furns.entity.*;
 import com.hspedu.furns.service.OrderService;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class OrderServiceImpl implements OrderService {
     private OrderDAO orderDAO = new OrderDAOImpl();
@@ -64,5 +61,15 @@ public class OrderServiceImpl implements OrderService {
         // 清空购物车
         cart.clear();
         return orderId;
+    }
+
+    @Override
+    public List<Order> listOrder(int memberId) {
+        return orderDAO.listOrder(memberId);
+    }
+
+    @Override
+    public List<OrderItem> listOrderDetails(String orderId) {
+        return orderItemDAO.listOrderDetails(orderId);
     }
 }

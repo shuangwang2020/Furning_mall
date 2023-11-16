@@ -2,6 +2,10 @@ package com.hspedu.furns.dao;
 
 import com.hspedu.furns.entity.OrderItem;
 
+import java.util.List;
+
 public interface OrderItemDAO {
-    public int saveOrderItem(OrderItem orderItem);
+    int saveOrderItem(OrderItem orderItem);
+
+    List<OrderItem> listOrderDetails(String orderId);
 }

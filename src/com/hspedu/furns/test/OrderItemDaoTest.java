@@ -16,4 +16,9 @@ public class OrderItemDaoTest {
                 new BigDecimal(200), 2, new BigDecimal(400), "sn00002");
         System.out.println(orderItemDAO.saveOrderItem(orderItem));
     }
+
+    @Test
+    public void listOrderDetails() {
+        System.out.println(orderItemDAO.listOrderDetails("169996853930415"));
+    }
 }
