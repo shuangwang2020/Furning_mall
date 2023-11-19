@@ -23,7 +23,7 @@ public abstract class BasicServlet extends HttpServlet {
         try {
             Method declaredMethod =
                     this.getClass().getDeclaredMethod(action, HttpServletRequest.class, HttpServletResponse.class);
-//            System.out.println("declaredMethod " + declaredMethod);
+            System.out.println("declaredMethod " + declaredMethod);
             declaredMethod.invoke(this, req, resp);
         } catch (Exception e) {
             // 心得体会：异常可以参与业务逻辑  默认的异常处理机制

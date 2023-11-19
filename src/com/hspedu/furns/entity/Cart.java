@@ -2,6 +2,7 @@ package com.hspedu.furns.entity;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Set;
  */
 public class Cart {
     // 包含多个CartItem,使用HashMap
-    private HashMap<Integer, CartItem> items = new HashMap();
+    private Map<Integer, CartItem> items = new HashMap();
 
     public boolean isEmpty() {
         return items.size() == 0;
@@ -63,7 +64,7 @@ public class Cart {
         return cartTotalPrice;
     }
 
-    public HashMap<Integer, CartItem> getItems() {
+    public Map<Integer, CartItem> getItems() {
         return items;
     }
 

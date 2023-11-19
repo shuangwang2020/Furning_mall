@@ -22,7 +22,9 @@ public class TransactionFilter implements Filter {
             JDBCUtilsByDruid.commit(); // 统一提交
         } catch (Exception e) {
             JDBCUtilsByDruid.rollBack();
-            e.printStackTrace();
+
+            // 抛出异常 给tomcat 因为filter是tomcat创建的 tomcat会根据errorcode来显示对应页面
+            throw new RuntimeException(e);
         }
     }
 

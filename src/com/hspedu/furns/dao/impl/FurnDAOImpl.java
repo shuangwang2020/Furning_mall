@@ -45,7 +45,7 @@ public class FurnDAOImpl extends BasicDAO<Furn> implements FurnDAO {
      */
     @Override
     public int updateFurn(Furn furn) {
-        String sql = "UPDATEXX `furn` SET `name` = ? , `maker` = ?, `price` = ?, " +
+        String sql = "UPDATE `furn` SET `name` = ? , `maker` = ?, `price` = ?, " +
                 "`sales` = ?, `stock` = ?, `img_path` = ? " +
                 "WHERE id = ?";
         return update(sql, furn.getName(), furn.getMaker(), furn.getPrice(), furn.getSales(),

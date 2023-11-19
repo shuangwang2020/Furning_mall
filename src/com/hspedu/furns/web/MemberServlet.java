@@ -1,5 +1,6 @@
 package com.hspedu.furns.web;
 
+import com.google.gson.Gson;
 import com.hspedu.furns.entity.Member;
 import com.hspedu.furns.service.MemberService;
 import com.hspedu.furns.service.impl.MemberServiceImpl;
@@ -8,11 +9,34 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY;
 
 public class MemberServlet extends BasicServlet {
     private MemberService memberService = new MemberServiceImpl();
+
+    /**
+     * 验证某个用户名是否已经存在DB中
+     *
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
+    protected void isExistUserName(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        boolean isExistsUsername = memberService.isExistsUsername(username);
+//        String resultJson = "{\"isExist\": " + isExistsUsername + "}";
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("isExist", isExistsUsername);
+//        resultMap.put("email", "jack@sohu.com");
+//        resultMap.put("job", "java");
+        String resultGson = new Gson().toJson(resultMap);
+
+        resp.getWriter().write(resultGson);
+    }
 
 //    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        String action = request.getParameter("action");
@@ -34,7 +58,6 @@ public class MemberServlet extends BasicServlet {
 
         // 重定向到网站首页 -> 刷新首页
         resp.sendRedirect(req.getContextPath());
-
     }
 
     protected void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -94,6 +117,8 @@ public class MemberServlet extends BasicServlet {
             } else {
                 // 返回注册页面
                 // 后面可以加入提示信息
+                request.setAttribute("register_msg", "用户名已存在");
+                request.setAttribute("active", "register");
                 request.getRequestDispatcher("/views/member/login.jsp").forward(request, response);
             }
         } else {
@@ -109,7 +134,22 @@ public class MemberServlet extends BasicServlet {
         }
     }
 
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void verifyCode(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // 获取用户提交的验证码
+        String verifyCode = req.getParameter("verifyCode");
+        // 从session中获取到验证码
+        String token = (String) req.getSession().getAttribute(KAPTCHA_SESSION_KEY);
+        boolean isCodeTrue = token.equalsIgnoreCase(verifyCode);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("isCodeTrue", isCodeTrue);
+//        resultMap.put("email", "jack@sohu.com");
+//        resultMap.put("job", "java");
+        String resultGson = new Gson().toJson(resultMap);
+
+        resp.getWriter().write(resultGson);
+    }
+
+    //    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        doPost(request, response);
 //    }
 }

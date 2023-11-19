@@ -16,10 +16,10 @@
     <script type="text/javascript" src="script/jquery-3.6.0.min.js"></script>
     <script>
         $(function () {
-            // 给add to cart 按钮绑定事件
+            // 给add to cart 按钮绑定事件 jquery
             $("button.add-to-cart").click(function () {
                 var furnId = $(this).attr("furnId");
-                alert("ok~~~" + furnId);
+                // alert("ok~~~" + furnId);
                 var stock = $(this).attr("stock");
                 if (stock == 0) {
                     // alert("ok~~~!!" + stock);
@@ -27,8 +27,20 @@
                     return false;
                 }
                 // 发出一个请求添加家居 => ajax
-                location.href = "cartServlet?action=addItem&id=" + furnId;
-
+                // location.href = "cartServlet?action=addItem&id=" + furnId;
+                // jquery发出ajax请求 解决刷新整个页面效率低的问题
+                // 这里通过json方式传入ajax请求要携带的数据
+                $.getJSON("cartServlet", {
+                    "action": "addItemByAjax",
+                    "id": furnId
+                },function (data) {
+                    // console.log("data=", data);
+                    if (data.url == undefined) { // 没有返回url 表示已经登录过
+                        $("span.header-action-num").text(data.cartTotalCount);
+                    } else {
+                        location.href = data.url;
+                    }
+                })
             })
         })
     </script>

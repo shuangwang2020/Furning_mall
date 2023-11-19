@@ -1,6 +1,7 @@
 package com.hspedu.furns.web;
 
 
+import com.google.gson.Gson;
 import com.hspedu.furns.entity.Cart;
 import com.hspedu.furns.entity.CartItem;
 import com.hspedu.furns.entity.Furn;
@@ -12,6 +13,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CartServlet extends BasicServlet {
     private FurnService furnService = new FurnServiceImpl();
@@ -60,6 +63,41 @@ public class CartServlet extends BasicServlet {
     }
 
     // 添加家居购物信息到购物车
+    protected void addItemByAjax(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = DataUtils.parseInt(req.getParameter("id"), 0);
+
+        Furn furn = furnService.queryFurnById(id);
+
+        if (furn == null) {
+            return;
+        }
+
+        if (furn.getStock() <= 0) {
+            System.out.println("库存不足");
+            resp.sendRedirect(req.getHeader("Referer"));
+            return;
+        }
+        // 根据furn构建CartItem
+        CartItem item =
+                new CartItem(furn.getId(), furn.getName(), furn.getPrice(), 1, furn.getPrice());
+
+        // 从session中获取cart对象
+        Cart cart = (Cart) req.getSession().getAttribute("cart");
+        if (null == cart) {
+            cart = new Cart();
+            req.getSession().setAttribute("cart", cart);
+        }
+
+        // 将cartItem加入到cart对象
+        cart.addItem(item);
+
+        // 添加完毕后返回json数据给前端 进行局部刷新 {"cartTotalCount": 3}
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("cartTotalCount", cart.getTotalCount());
+        String resultJson = new Gson().toJson(resultMap);
+        resp.getWriter().write(resultJson);
+    }
+
     protected void addItem(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = DataUtils.parseInt(req.getParameter("id"), 0);
 

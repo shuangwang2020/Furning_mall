@@ -38,7 +38,7 @@ public class BasicDAO<T> { //泛型指定具体类型
             int update = qr.update(connection, sql, parameters);
             return  update;
         } catch (SQLException e) {
-           throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
+           throw new RuntimeException(e); //将编译异常->运行异常 ,抛出
         }
 //        finally {
 //            JDBCUtilsByDruid.close(null, null, connection); // 会在commit和rollback中关闭

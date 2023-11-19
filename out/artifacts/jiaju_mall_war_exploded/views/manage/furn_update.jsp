@@ -54,7 +54,7 @@
                 <!-- Header Logo Start -->
                 <div class="col-auto align-self-center">
                     <div class="header-logo">
-                        <a href="index.html"><img src="assets/images/logo/logo.png" alt="Site Logo"/></a>
+                        <a href="index.jsp"><img src="assets/images/logo/logo.png" alt="Site Logo"/></a>
                     </div>
                 </div>
                 <!-- Header Logo End -->
@@ -84,7 +84,7 @@
                 <!-- Header Logo Start -->
                 <div class="col-auto align-self-center">
                     <div class="header-logo">
-                        <a href="index.html"><img width="280px" src="assets/images/logo/logo.png" alt="Site Logo"/></a>
+                        <a href="index.jsp"><img width="280px" src="assets/images/logo/logo.png" alt="Site Logo"/></a>
                     </div>
                 </div>
                 <!-- Header Logo End -->
@@ -102,12 +102,12 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                 <%--自己一定要多思考，多看代码, 多动手, 因为是post,所以我们需要使用到隐藏域id,action--%>
-                <form action="manage/furnServlet" method="post">
+                <form action="manage/furnServlet?id=${requestScope.furn.id}&action=update&pageNo=${param.pageNo}" method="post" enctype="multipart/form-data">
                     <%--传id--%>
-                    <input type="hidden" name="id" value="${requestScope.furn.id}">
-                    <input type="hidden" name="pageNo" value="${param.pageNo}">
+                    <%--<input type="hidden" name="id" value="${requestScope.furn.id}">--%>
+                    <%--<input type="hidden" name="pageNo" value="${param.pageNo}">--%>
                     <%--&lt;%&ndash;确定调用servlet的update方法&ndash;%&gt;--%>
-                    <input type="hidden" name="action" value="update">
+                    <%--<input type="hidden" name="action" value="update">--%>
                     <%--<input type="hidden" name="pageNo" value="${param.pageNo}">--%>
                     <div class="table-content table-responsive cart-table-content">
                         <table>

@@ -17,6 +17,56 @@
     <!-- ctrl + Home 快速定位到页首 ctrl + end-->
     <script type="text/javascript">
         $(function () {
+            // 给用户名输入框绑定一个事件 blur
+            $("#username").blur(function () {
+                // alert("hello");
+                // 获取输入的用户名
+                var username = this.value;
+
+                // 发出ajax请求 => jquery
+                // 尽量准确，一把搞定
+                $.getJSON("memberServlet",
+                    // "action=isExistUserName&username=" + username,
+                    // 相当于发送的ajax请求，携带的数据是通过json对象放入 没有区别
+                    {
+                        "action": "isExistUserName",
+                        "username": username,
+                        "date": new Date()
+                    },
+                    function (data) {
+                        // console.log("data=", data.isExist);
+                        if (data.isExist) {
+                            $("span[class='errorMsg']").text("用户名已经存在.");
+                        } else {
+                            $("span[class='errorMsg']").text("用户名不存在.");
+                        }
+                    })
+            })
+
+            $("#code").blur(function () {
+                // alert("hello");
+                // 获取输入的验证码
+                var inputVerifyCode = this.value;
+
+                // 发出ajax请求 => jquery
+                $.getJSON("memberServlet",
+                    // "action=isExistUserName&username=" + username,
+                    // 相当于发送的ajax请求，携带的数据是通过json对象放入 没有区别
+                    {
+                        "action": "verifyCode",
+                        "verifyCode": inputVerifyCode,
+                        "date": new Date()
+                    },
+                    function (data) {
+                        // console.log("data=", data.isExist);
+                        if (data.isCodeTrue) {
+                            $("span[class='verifyMsg']").text("验证码正确.");
+                        } else {
+                            $("span[class='verifyMsg']").text("验证码错误.");
+                        }
+                    })
+            })
+
             // 模拟一个点击事件,选中注册
             if ("${requestScope.active}" == "register") {
                 $("#register_tab")[0].click();
@@ -175,6 +225,8 @@
                                         <input name="email" id="email" placeholder="电子邮件" value="${requestScope.email}" type="email"/>
                                         <input type="text" id="code" name="code" style="width: 120px;height: 50px"
                                                placeholder="验证码"/>　　<img id="codeImg" alt="" src="kaptchaServlet">
+                                        <span class="verifyMsg"
+                                              style="float: right; font-weight: bold; font-size: 20pt; margin-left: 10px;"></span>
                                         <div class="button-box">
                                             <button type="submit" id="sub-btn"><span>会员注册</span></button>
                                         </div>
