@@ -39,6 +39,16 @@ public class OrderServlet extends BasicServlet {
             return;
         }
         // 就可以生成订单
+        //  如果只是对orderService.saveOrder进行事务控制
+        // 可以不使用过滤器，直接在这个位置进行提交和回滚即可
+//        String orderId = null;
+//        try {
+//            orderId = orderService.saveOrder(cart, member.getId());
+//            JDBCUtilsByDruid.commit();
+//        } catch (Exception e) {
+//            JDBCUtilsByDruid.rollBack();
+//            e.printStackTrace();
+//        }
         String orderId = orderService.saveOrder(cart, member.getId());
         req.getSession().setAttribute("orderId", orderId);
         // 重定向到checkout.jsp

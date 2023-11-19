@@ -26,15 +26,23 @@ public class BasicDAO<T> { //泛型指定具体类型
         Connection connection = null;
 
         try {
+            // 1.每次执行完update就提交了 独立事务
+            // 2.每次从连接池中取出connection 不能保证是同一个
+            // 解决方法：1.一次请求中是同一个Connection
+            // 2. 默认是手动提交事务
+            // 实现前提:servlet-service-dao的调用过程，始终是一个线程
+            // 这是使用ThreadLocal的前提
+            // 从当前线程关联的ThreadLocal获取的connection
+            // 所以可以保证同一个线程/请求中是同一个连接
             connection = JDBCUtilsByDruid.getConnection();
             int update = qr.update(connection, sql, parameters);
             return  update;
         } catch (SQLException e) {
            throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
         }
-
+//        finally {
+//            JDBCUtilsByDruid.close(null, null, connection); // 会在commit和rollback中关闭
+//        }
     }
 
     //返回多个对象(即查询的结果是多行), 针对任意表
@@ -55,8 +63,6 @@ public class BasicDAO<T> { //泛型指定具体类型
 
         } catch (SQLException e) {
             throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
         }
 
     }
@@ -71,8 +77,6 @@ public class BasicDAO<T> { //泛型指定具体类型
 
         } catch (SQLException e) {
             throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
         }
     }
 
@@ -87,9 +91,6 @@ public class BasicDAO<T> { //泛型指定具体类型
 
         } catch (SQLException e) {
             throw  new RuntimeException(e); //将编译异常->运行异常 ,抛出
-        } finally {
-            JDBCUtilsByDruid.close(null, null, connection);
         }
     }
-
 }

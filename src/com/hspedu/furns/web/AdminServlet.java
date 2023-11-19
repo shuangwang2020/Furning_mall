@@ -1,6 +1,7 @@
 package com.hspedu.furns.web;
 
 import com.hspedu.furns.entity.Admin;
+import com.hspedu.furns.entity.Member;
 import com.hspedu.furns.service.AdminService;
 import com.hspedu.furns.service.impl.AdminServiceImpl;
 
@@ -26,6 +27,8 @@ public class AdminServlet extends BasicServlet {
             // 页面转发
             request.getRequestDispatcher("/views/manage/manage_login.jsp").forward(request, response);
         } else {
+            Member member = new Member(admin.getId(), admin.getUsername(), admin.getPassword(), admin.getEmail());
+            request.getSession().setAttribute("member", member);
             request.getRequestDispatcher("/views/manage/manage_menu.jsp")
                     .forward(request, response);
         }
