@@ -166,9 +166,62 @@
 
                     这里的关键就是要根据不同的情况来初始化begin, end
                 --%>
+                <c:choose>
+                    <%--如果总页数<=5, 就全部显示--%>
+                    <c:when test="${requestScope.page.pageTotalCount <= 5} ">
+                        <c:set var="begin" value="1"/>
+                        <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+                    </c:when>
+                    <%--如果总页数 > 5, 按照如下规则显示--%>
+                    <c:when test="${requestScope.page.pageTotalCount > 5}">
+                        <c:choose>
+                            <%--如果当前页是前3页, 就显示1-5--%>
+                            <c:when test="${requestScope.page.pageNo <= 3}">
+                                <c:set var="begin" value="1"/>
+                                <c:set var="end" value="5"/>
+                            </c:when>
+                            <c:when test="${requestScope.page.pageNo > requestScope.page.pageTotalCount - 3}">
+                                <c:set var="begin" value="${requestScope.page.pageTotalCount - 4}"/>
+                                <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="begin" value="${requestScope.page.pageNo - 2}"/>
+                                <c:set var="end" value="${requestScope.page.pageNo + 2}"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:when>
+                </c:choose>
+<%--                <c:choose>--%>
+<%--                    &lt;%&ndash;如果总页数<=5, 就全部显示&ndash;%&gt;--%>
+<%--                    <c:when test="${requestScope.page.pageTotalCount <=5 }">--%>
+<%--                        <c:set var="begin" value="1"/>--%>
+<%--                        <c:set var="begin" value="${requestScope.page.pageTotalCount}"/>--%>
+<%--                    </c:when>--%>
+<%--                    &lt;%&ndash;如果总页数>5&ndash;%&gt;--%>
+<%--                    <c:when test="${requestScope.page.pageTotalCount > 5}">--%>
+<%--                        <c:choose>--%>
+<%--                            &lt;%&ndash;如果当前页是前3页, 就显示1-5&ndash;%&gt;--%>
+<%--                            <c:when test="${requestScope.page.pageNo <= 3}">--%>
+<%--                                <c:set var="begin" value="1"/>--%>
+<%--                                <c:set var="end" value="5"/>--%>
+<%--                            </c:when>--%>
+<%--                            &lt;%&ndash;如果当前页是后3页, 就显示最后5页&ndash;%&gt;--%>
+<%--                            <c:when test="${requestScope.page.pageNo > requestScope.page.pageTotalCount - 3}">--%>
+<%--                                <c:set var="begin" value="${requestScope.page.pageTotalCount - 4}"/>--%>
+<%--                                <c:set var="end" value="${requestScope.page.pageTotalCount}"/>--%>
+<%--                            </c:when>--%>
+<%--                            &lt;%&ndash;如果当前页是中间页, 就显示 当前页前2页, 当前页 , 当前页后两页&ndash;%&gt;--%>
+<%--                            <c:otherwise>--%>
+<%--                                <c:set var="begin" value="${requestScope.page.pageNo - 2}"/>--%>
+<%--                                <c:set var="end" value="${requestScope.page.pageNo + 2}"/>--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
+<%--                    </c:when>--%>
+<%--                </c:choose>--%>
+
                 <%--默认是page域--%>
-                <c:set var="begin" value="1"/>
-                <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+                <%--                <c:set var="begin" value="1"/>--%>
+                <%--                <c:set var="end" value="${requestScope.page.pageTotalCount}"/>--%>
                 <c:forEach begin="${begin}" end="${end}" var="i">
                     <%--如果是当前页 就处于激活状态--%>
                     <c:if test="${i == requestScope.page.pageNo}">
@@ -208,7 +261,8 @@
                                     <ul class="align-items-center">
                                         <li class="li"><a class="single-link" href="about.html">关于我们</a></li>
                                         <li class="li"><a class="single-link" href="#">交货信息</a></li>
-                                        <li class="li"><a class="single-link" href="privacy-policy.html">隐私与政策</a></li>
+                                        <li class="li"><a class="single-link" href="privacy-policy.html">隐私与政策</a>
+                                        </li>
                                         <li class="li"><a class="single-link" href="#">条款和条件</a></li>
                                         <li class="li"><a class="single-link" href="#">制造</a></li>
                                     </ul>

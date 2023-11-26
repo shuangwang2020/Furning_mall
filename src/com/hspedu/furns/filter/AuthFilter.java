@@ -36,7 +36,7 @@ public class AuthFilter implements Filter {
         String url = request.getServletPath();
         System.out.println("url=" + url);
         if (!excludedUrls.contains(url)) {
-            // 得到sessiob中的member对象
+            // 得到session中的member对象
             Member member = (Member) request.getSession().getAttribute("member");
             if (member == null) {
                 if (!WebUtils.isAjaxRequest(request)) {
@@ -56,6 +56,7 @@ public class AuthFilter implements Filter {
                 // 返回
                 return;
             } else {
+                // 不是admin 不允许访问后台
                 if (url.contains("/manage") && !"admin".equals(member.getUsername())) {
                     request.getRequestDispatcher("/views/manage/manage_login.jsp").
                             forward(servletRequest, servletResponse);

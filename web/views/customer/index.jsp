@@ -33,7 +33,7 @@
                 $.getJSON("cartServlet", {
                     "action": "addItemByAjax",
                     "id": furnId
-                },function (data) {
+                }, function (data) {
                     // console.log("data=", data);
                     if (data.url == undefined) { // 没有返回url 表示已经登录过
                         $("span.header-action-num").text(data.cartTotalCount);
@@ -175,7 +175,8 @@
                                                    data-bs-target="#exampleModal"><i
                                                         class="icon-size-fullscreen"></i></a>
                                             </div>
-                                            <button title="Add To Cart" stock="${furn.stock}" furnId="${furn.id}" class="add-to-cart">Add
+                                            <button title="Add To Cart" stock="${furn.stock}" furnId="${furn.id}"
+                                                    class="add-to-cart">Add
                                                 To Cart
                                             </button>
                                         </div>
@@ -226,8 +227,33 @@
             学生困惑：如果页数很多，怎么办? => 算法最多显示5页[这个规则可以由程序员决定.]
                     希望，小伙伴自己先想一想...=> 后面
         --%>
-        <c:set var="begin" value="1"/>
-        <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+        <c:choose>
+            <%--如果总页数<=5, 就全部显示--%>
+            <c:when test="${requestScope.page.pageTotalCount <= 5} ">
+                <c:set var="begin" value="1"/>
+                <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+            </c:when>
+            <%--如果总页数 > 5, 按照如下规则显示--%>
+            <c:when test="${requestScope.page.pageTotalCount > 5}">
+                <c:choose>
+                    <%--如果当前页是前3页, 就显示1-5--%>
+                    <c:when test="${requestScope.page.pageNo <= 3}">
+                        <c:set var="begin" value="1"/>
+                        <c:set var="end" value="5"/>
+                    </c:when>
+                    <c:when test="${requestScope.page.pageNo > requestScope.page.pageTotalCount - 3}">
+                        <c:set var="begin" value="${requestScope.page.pageTotalCount - 4}"/>
+                        <c:set var="end" value="${requestScope.page.pageTotalCount}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="begin" value="${requestScope.page.pageNo - 2}"/>
+                        <c:set var="end" value="${requestScope.page.pageNo + 2}"/>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+        </c:choose>
+        <%--        <c:set var="begin" value="1"/>--%>
+        <%--        <c:set var="end" value="${requestScope.page.pageTotalCount}"/>--%>
         <c:forEach begin="${begin}" end="${end}" var="i">
             <%--如果i是当前页, 就使用class="active" 修饰--%>
             <c:if test="${i == requestScope.page.pageNo}">
@@ -290,7 +316,8 @@
                                     <ul class="align-items-center">
                                         <li class="li"><a class="single-link" href="about.html">关于我们</a></li>
                                         <li class="li"><a class="single-link" href="#">交货信息</a></li>
-                                        <li class="li"><a class="single-link" href="privacy-policy.html">隐私与政策</a></li>
+                                        <li class="li"><a class="single-link" href="privacy-policy.html">隐私与政策</a>
+                                        </li>
                                         <li class="li"><a class="single-link" href="#">条款和条件</a></li>
                                         <li class="li"><a class="single-link" href="#">制造</a></li>
                                     </ul>

@@ -104,13 +104,13 @@ public class FurnServlet extends BasicServlet {
                             String filePath = "/" + WebUtils.FURN_IMG_DIRECTORY; // 从网站根目录开始算
                             //2. 获取到完整目录 [io/servlet基础]
                             //  这个目录是和你的web项目运行环境绑定的. 是动态.
-                            //fileRealPath=D:\hspedu_javaweb\fileupdown\out\artifacts\fileupdown_war_exploded\xupload\
+                            //fileRealPath=D:\hspedu_javaweb\fileupdown\out\artifacts\fileupdown_war_exploded\
                             String fileRealPath =
                                     req.getServletContext().getRealPath(filePath);
                             System.out.println("fileRealPath=" + fileRealPath);
 
                             //3. 创建这个上传的目录=> 创建目录?=> Java基础
-                            File fileRealPathDirectory = new File(fileRealPath);
+                            File fileRealPathDirectory = new File(fileRealPath + "/" + WebUtils.getYearMonthDay());
                             if (!fileRealPathDirectory.exists()) {//不存在，就创建
                                 fileRealPathDirectory.mkdirs();//创建
                             }
@@ -123,12 +123,12 @@ public class FurnServlet extends BasicServlet {
                             fileItem.write(new File(fileFullPath));
                             fileItem.getOutputStream().close();
 //                        //5. 提示信息
-//                        resp.setContentType("text/html;charset=utf-8");
+//                        resp.setContentType("text/html;ch-arset=utf-8");
 //                        resp.getWriter().write("上传成功~");
 
                             // 更新图片路径
                             String originalImgPath = furn.getImgPath();
-                            furn.setImgPath(WebUtils.FURN_IMG_DIRECTORY + "/" +name);
+                            furn.setImgPath(WebUtils.FURN_IMG_DIRECTORY + "/" + WebUtils.getYearMonthDay() + name);
 
                             // 删除原来的图片
                             if (!"".equals(originalImgPath) || originalImgPath != null) {
@@ -141,7 +141,6 @@ public class FurnServlet extends BasicServlet {
                         }
                     }
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
